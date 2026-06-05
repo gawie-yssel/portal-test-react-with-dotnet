@@ -1,0 +1,11 @@
+# env variables exposed to the Linx Portal
+env:
+  - name: FRONTEND_PORT
+    default: "5173"
+  - name: BACKEND_PORT
+    default: "5122"
+
+# Linx Portal configuration for the application
+port:
+  default: 5122
+  linked_env_var: BACKEND_PORT

@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(dotnet --version)",
+      "PowerShell(node --version)",
+      "PowerShell(npm --version)",
+      "PowerShell(dotnet new web -n backend -o backend --no-https=false 2>&1)",
+      "PowerShell(npm create vite@latest frontend -- --template react 2>&1)",
+      "PowerShell(Get-ChildItem -Recurse frontend -File | Where-Object { $_.FullName -notmatch 'node_modules' } | Select-Object FullName)",
+      "PowerShell(New-Item -ItemType Directory frontend)",
+      "PowerShell(New-Item -ItemType Directory frontend\\\\src)",
+      "PowerShell(\"done\")",
+      "PowerShell(npm install --prefix frontend 2>&1)",
+      "PowerShell(dotnet build backend 2>&1)",
+      "PowerShell(npm run build --prefix frontend 2>&1)",
+      "PowerShell(\"cleaned\")",
+      "PowerShell($null = [System.Management.Automation.Language.Parser]::ParseFile\\(\"$PWD\\\\dev.ps1\", [ref]$null, [ref]$null\\); \"dev.ps1 parses OK\")",
+      "PowerShell(pwsh -File .\\\\dev.ps1 2>&1 | Out-File dev-test.log)",
+      "PowerShell($be=$null;$fe=$null; for\\($i=0;$i -lt 30;$i++\\){ if\\(-not $be\\){try{$be=\\(Invoke-RestMethod \"http://localhost:5122/api/hello\" -TimeoutSec 2\\).message}catch{}}; if\\(-not $fe\\){try{$null=Invoke-WebRequest \"http://localhost:5173\" -TimeoutSec 2 -UseBasicParsing;$fe=\"up\"}catch{}}; if\\($be -and $fe\\){break}; Start-Sleep -Milliseconds 700 }; \"backend: $be\"; \"frontend: $fe\")",
+      "PowerShell(foreach\\($port in 5122,5173\\){ Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue | Select-Object -Expand OwningProcess -Unique | ForEach-Object { Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue } }; Remove-Item dev-test.log -ErrorAction SilentlyContinue; \"cleaned up\")",
+      "PowerShell($env:BACKEND_PORT='5300'; $env:FRONTEND_PORT='5400'; $env:MESSAGE='Hello from env'; pwsh -File .\\\\dev.ps1 2>&1 | Out-File dev-test.log)",
+      "PowerShell($be=$null;$fe=$null; for\\($i=0;$i -lt 40;$i++\\){ if\\(-not $be\\){try{$be=\\(Invoke-RestMethod \"http://localhost:5300/api/hello\" -TimeoutSec 2\\).message}catch{}}; if\\(-not $fe\\){try{$h=\\(Invoke-WebRequest \"http://localhost:5400\" -TimeoutSec 2 -UseBasicParsing\\).Content; $fe = if\\($h -match 'VITE_API_URL|/src/main.jsx'\\){'up'}else{'up'}}catch{}}; if\\($be -and $fe\\){break}; Start-Sleep -Milliseconds 700 }; \"backend message \\(port 5300\\): $be\"; \"frontend \\(port 5400\\): $fe\")",
+      "PowerShell(foreach\\($port in 5300,5400\\){ Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue | Select-Object -Expand OwningProcess -Unique | ForEach-Object { Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue } }; Remove-Item dev-test.log -ErrorAction SilentlyContinue; \"cleaned up\")"
+    ]
+  }
+}
